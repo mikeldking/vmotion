@@ -1,3 +1,6 @@
+import { Cursor } from "./cursor.js";
+import { Grid } from "./grid.js";
+// Add the mounds
 const canvas = document.getElementById("canvas");
 if (!canvas) {
     throw new Error("Failed to get canvas element");
@@ -11,40 +14,42 @@ if (!ctx) {
 }
 let x = 0;
 let y = 0;
-class Square {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.size = 20;
-    }
-    moveRight() {
-        this.x += this.size;
-    }
-    moveLeft() {
-        this.x -= this.size;
-    }
-    moveDown() {
-        this.y += this.size;
-    }
-    moveUp() {
-        this.y -= this.size;
-    }
-}
-const square = new Square();
+const cursor = new Cursor({ canvasHeight: 1000, canvasWidth: 1000 });
+let activeKey = null;
 document.addEventListener("keydown", (event) => {
+    console.log("Keypress: " + event.key);
     if (event.key === "j") {
-        square.moveDown();
+        cursor.moveDown();
     }
     if (event.key === "k") {
-        square.moveUp();
+        cursor.moveUp();
     }
     if (event.key === "h") {
-        square.moveLeft();
+        cursor.moveLeft();
     }
     if (event.key === "l") {
-        square.moveRight();
+        cursor.moveRight();
+    }
+    if (event.key === "$") {
+        cursor.moveToEndOfLine();
+    }
+    if (event.key === "G") {
+        cursor.moveToBeginningOfLine();
+        cursor.moveToBottom();
+    }
+    if (event.key === "0") {
+        cursor.moveToBeginningOfLine();
+    }
+    if (event.key === "g") {
+        if (activeKey === "g") {
+            cursor.moveToBeginningOfLine();
+            cursor.moveToTop();
+            activeKey = null;
+        }
+        activeKey = event.key;
     }
 });
+const grid = new Grid(canvas);
 function clear() {
     if (!ctx) {
         throw new Error("No canvas context");
@@ -58,15 +63,14 @@ function draw() {
     if (!ctx) {
         throw new Error("No canvas context");
     }
-    ctx.fillStyle = "green";
-    ctx.fillRect(square.x, square.y, square.size, square.size);
-    console.log("rendered");
+    ctx.fillStyle = "blue";
+    ctx.fillRect(cursor.x, cursor.y, cursor.size, cursor.size);
 }
 function loop() {
     clear();
+    grid.render();
     draw();
     requestAnimationFrame(loop);
 }
 loop();
-export {};
 //# sourceMappingURL=index.js.map

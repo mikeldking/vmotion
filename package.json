@@ -1,15 +1,16 @@
 {
-  "name": "kb",
+  "name": "vmotion",
   "version": "1.0.0",
-  "description": "",
+  "description": "a game to teach you vim motions",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "serve . & tsc --watch"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
     "typescript": "^5.9.2"
